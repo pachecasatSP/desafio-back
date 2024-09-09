@@ -1,0 +1,80 @@
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:8080"  
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultDB=Host=db;Database=rentalmanagement;Username=postgres;Password=27QWnljFUKDw
+      - ConnectionStrings__AuditDB=Host=db;Database=audit;Username=postgres;Password=27QWnljFUKDw
+      - RabbitMQ__Host=localhost
+      - RabbitMQ__Port=5672
+      - RabbitMQ__UserName=guest
+      - RabbitMQ__Password=guest 
+    depends_on:
+      - db
+      - rabbitmq
+
+  db:
+    image: postgres:13
+    user: postgres
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=27QWnljFUKDw
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 5s
+      timeout: 15s
+      retries: 3
+    volumes:
+      - db_data_final:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"  
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:8.3.0
+  #   environment:
+  #     - node.name=es01
+  #     - cluster.name=es-cluster
+  #     - discovery.type=single-node
+  #     - ES_JAVA_OPTS=-Xms512m -Xmx512m
+  #   ports:
+  #     - "9200:9200" 
+  #   volumes:
+  #     - es_data:/usr/share/elasticsearch/data
+
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:8.3.0
+  #   ports:
+  #     - "5044:5044"  
+  #   volumes:
+  #     - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+  #     - ./logstash/pipeline:/usr/share/logstash/pipeline
+  #   depends_on:
+  #     - elasticsearch
+
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:8.3.0
+  #   ports:
+  #     - "5601:5601"  
+  #   environment:
+  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+  #   depends_on:
+  #     - elasticsearch
+
+volumes:
+  db_data_final:
+  #es_data:
