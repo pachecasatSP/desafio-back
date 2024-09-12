@@ -1,81 +1,68 @@
-﻿using desafio_back.api.Handlers.Commands;
-using desafio_back.api.Models.Commands;
-using desafio_back.api.Models.Queries;
+﻿using AutoMapper;
 using desafio_back.api.Models.Request;
-using desafio_back.domain.Models.Entities;
+using desafio_back.api.Models.Results;
+using desafio_back.domain.Commands;
+using desafio_back.domain.Entities.DomainEntities;
+using desafio_back.domain.Entities.Response;
+using desafio_back.domain.Queries;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace desafio_back.api.MinimalApis
+namespace desafio_back.api.Apis;
+public static class MotorcycleApis
 {
-    public static class MotorcycleApis
+    public static void MapMotorcycleEndpoints(this IEndpointRouteBuilder routes)
     {
-        public static void MapMotorcycleEndpoints(this IEndpointRouteBuilder routes)
+
+        routes.MapPost("/motos", async (IValidator<CreateMotorcycleRequest> validator, IMediator mediatr,
+                                        IMapper mapper, [FromServices] ILogger<Program> logger, CreateMotorcycleRequest request) =>
         {
 
-            routes.MapPost("/motos", async (IValidator<CreateMotorcycleCommand> validator, IMediator mediatr, CreateMotorcycleCommand command) =>
-            {
-                var result = await validator.ValidateAsync(command);
-                if (!result.IsValid)
-                    return Results.Json(new { Mensagem = "dados inválidos." }, statusCode: 400);
+            var command = mapper.Map<CreateMotorcycleCommand>(request);
 
-                var response = await mediatr.Send(command);
-                if (response is Motorcycle)
-                    return Results.Created();
-                else
-                    return Results.Json(new { Mensagem = "dados inválidos." }, statusCode: 400);
-            });
+            var response = await mediatr.Send(command);
+            return response is Motorcycle
+                    ? DefaultResults.CreateCreatedResult()
+                    : DefaultResults.CreateInvalidResult();
 
-            routes.MapGet("/motos", async (IMediator mediatr) =>
-            {
-                var response = await mediatr.Send(new GetAllMotorcyclesQuery());
-                return Results.Ok(response.ToList());
-            });
+        }).AddFluentValidationFilter();
 
-            routes.MapGet("motos/{id}/placa", async (IMediator mediatr, string id) =>
-            {
-                var response = await mediatr.Send(new GetMotorcycleByPlateQuery(id));
-                if (response == null)
-                    return Results.BadRequest();
+        routes.MapGet("/motos", async (IMediator mediatr) =>
+        {
+            var response = await mediatr.Send(new GetAllMotorcyclesQuery());
+            return response.Any()
+                ? DefaultResults.CreateOkResultResponse(response.ToList())
+                : DefaultResults.CreateNotFoundResult();
+        });
+        
+        routes.MapPut("motos/{id}/placa", async (IValidator<UpdateMotorcyclePlateRequest> validator, IMediator mediatr,
+                                                string id, [FromServices] ILogger<Program> logger, [FromBody] UpdateMotorcyclePlateRequest request) =>
+        {
+            var response = await mediatr.Send(new UpdateMotorcyclePlateCommand(id, request.Placa));
+            return response
+                ? DefaultResults.CreateOkResult("Placa modificada com sucesso. ")
+                : DefaultResults.CreateInvalidResult();
+        }).AddFluentValidationFilter();
 
-                return Results.Ok(response);
-            });
+        routes.MapGet("motos/{id}", async (IMediator mediatr, string? id) =>
+        {
+            if (id is null)
+                return DefaultResults.CreateInvalidResult();
 
-            routes.MapPut("motos/{id}/placa", async (IValidator<UpdateMotorcyclePlateRequest> validator, IMediator mediatr, string id, [FromBody] UpdateMotorcyclePlateRequest request) =>
-            {
-                var result = await validator.ValidateAsync(request);
-                if(!result.IsValid)
-                    return Results.Json(new { Mensagem = "Dados inválidos." }, statusCode: 400);
+            var response = await mediatr.Send(new GetMotorcycleByIdQuery(id!));
+            return response is GetMotorcycleResponse
+                 ? DefaultResults.CreateOkResultResponse(response)
+                 : DefaultResults.CreateInvalidResult("moto não encontrada.");
 
-                var response = await mediatr.Send(new UpdateMotorcyclePlateCommand(id, request.placa));
-                if (response)
-                    return Results.Ok(new { Mensagem = "Placa modificada com sucesso. " });
-                else
-                    return Results.Json(new { Mensagem = "Dados inválidos." }, statusCode: 400);
-            });
+        });
 
-            routes.MapGet("motos/{id}", async (IMediator mediatr, string? id) =>
-            {
-                if (id is null)
-                    return Results.Json(new { Mensagem = "Request mal formada" }, statusCode: 400);
-
-                var response = await mediatr.Send(new GetMotorcycleByIdQuery(id!));
-                if (response is null)
-                    return Results.Json(new { Mensagem = "Moto não encontrada." }, statusCode: 404);
-                else
-                    return Results.Ok(response);
-
-            });
-
-            routes.MapDelete("motos/{id}", async (IMediator mediatr, string id) =>
-            {
-                var response = await mediatr.Send(new DeleteMotorcycleByIdCommand(id));
-                if (response)
-                    return Results.Ok();
-                else
-                    return Results.Json(new { Mensagem = "dados inválidos." });
-            });
-        }
+        routes.MapDelete("motos/{id}", async (IMediator mediatr, string id) =>
+        {
+            var response = await mediatr.Send(new DeleteMotorcycleByIdCommand(id));
+            return response
+                ? DefaultResults.CreateOkResult()
+                : DefaultResults.CreateInvalidResult();
+        });
     }
 }

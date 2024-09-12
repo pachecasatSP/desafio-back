@@ -1,5 +1,5 @@
 ﻿using desafio_back.domain.Abstractions.Events;
-using desafio_back.domain.Models.Entities;
+using desafio_back.domain.Entities.DomainEntities;
 
 namespace desafio_back.domain.Events
 {
@@ -11,7 +11,7 @@ namespace desafio_back.domain.Events
 
         public override string ToString()
         {
-            return $"Nova moto 2024 {base.ToString()} foi criada.";
+            return $"Nova moto 2024 {Entity.ToString()} foi criada.";
         }
     }
 }

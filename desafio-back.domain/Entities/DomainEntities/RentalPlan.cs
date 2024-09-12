@@ -1,12 +1,20 @@
 ﻿using desafio_back.domain.Models.Base;
-using desafio_back.domain.Models.Entities;
 
-namespace desafio_back.domain.Entities.DomainEntities
+namespace desafio_back.domain.Entities.DomainEntities;
+
+public class RentalPlan : EntityBase
 {
-    public class RentalPlan : EntityBase
+    public string? Name { get; set; }
+    public int TermInDays { get; set; }
+    public decimal Value { get; set; }
+    public decimal EarlyPenalty { get; set; }
+    public decimal AdditionalDayValue { get; set; }
+
+    public ICollection<Rental> RentalCollection { get; set; } = [];
+
+    public void AddRental(Rental rental)
     {
-        public string Nome { get; set; }
-        public int PrazoDias { get; set; }
-        public decimal Valor { get; set; }       
+        rental.Plan = this;
+        RentalCollection.Add(rental);
     }
 }

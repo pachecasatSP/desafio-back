@@ -1,0 +1,23 @@
+{
+  "Version": 1,
+  "Hash": "Hm+uasWf9nj0WX8++vT0oH9wE7GE+NPts0/qQLucPWM=",
+  "Source": "desafio-back.integration.tests",
+  "BasePath": "_content/desafio-back.integration.tests",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\adolf\\source\\Repos\\desafio-back\\desafio-back.api\\desafio-back.api.csproj",
+      "Version": 2,
+      "Source": "desafio-back.api",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("desafio-back.domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+919d342820c0bb30f0f29c4ae1380f5201ae3999")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8152b572a6367290b533619becaeacaf9dcaf185")]
 [assembly: System.Reflection.AssemblyProductAttribute("desafio-back.domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("desafio-back.domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

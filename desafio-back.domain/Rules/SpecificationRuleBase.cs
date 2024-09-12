@@ -12,10 +12,10 @@ namespace desafio_back.domain.Rules
 
         protected SpecificationRuleBase(TSpecification specification) => _specification = specification;
 
-        public bool Apply (TEntity entity) =>
+        public bool Apply(TEntity entity) =>
             _specification.IsSatisfiedBy(entity);
 
-        public IEnumerable<TEntity> Apply(IEnumerable<TEntity> entities) => 
+        public IEnumerable<TEntity> Apply(IEnumerable<TEntity> entities) =>
             entities.Where(_specification.IsSatisfiedBy);
     }
 }

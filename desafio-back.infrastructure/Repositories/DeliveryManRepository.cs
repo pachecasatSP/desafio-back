@@ -1,14 +1,12 @@
-﻿using desafio_back.domain.Models.Entities;
-using desafio_back.infrastructure.Repositories.Base;
+﻿using desafio_back.domain.Abstractions.Repositories;
+using desafio_back.domain.Entities.DomainEntities;
 using desafio_back.infrastructure.Repositories.Context;
 
-namespace desafio_back.infrastructure.Repositories
+namespace desafio_back.infrastructure.Repositories;
+
+public class DeliveryManRepository : RepositoryBase<DeliveryMan>, IDeliveryManRepository
 {
-    internal class DeliveryManRepository : RepositoryBase<DeliveryMan>
-    {
-        public DeliveryManRepository(RentalManagementContext context) : 
-            base(context)
-        {
-        }
-    }
+    public DeliveryManRepository(RentalManagementContext context) :
+        base(context)
+    { }
 }

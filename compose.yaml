@@ -10,13 +10,15 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultDB=Host=db;Database=rentalmanagement;Username=postgres;Password=27QWnljFUKDw
       - ConnectionStrings__AuditDB=Host=db;Database=audit;Username=postgres;Password=27QWnljFUKDw
-      - RabbitMQ__Host=localhost
+      - ConnectionString__BlobStorage=SharedAccessSignature=sv=2023-01-03&ss=btqf&srt=sco&st=2024-09-11T12%3A21%3A33Z&se=2024-09-12T12%3A21%3A33Z&sp=rwdxftlacup&sig=dY8xzmLhoo%2Fa6siJcS74mZYiC2wnYO8nbM7cM6mtcWA%3D;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;FileEndpoint=http://devstoreaccount1.file.core.windows.net;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;
+      - RabbitMQ__Host=rabbitmq
       - RabbitMQ__Port=5672
       - RabbitMQ__UserName=guest
-      - RabbitMQ__Password=guest 
+      - RabbitMQ__Password=guest          
     depends_on:
       - db
       - rabbitmq
+      - azurite
 
   db:
     image: postgres:13
@@ -44,37 +46,21 @@ services:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
 
-  # elasticsearch:
-  #   image: docker.elastic.co/elasticsearch/elasticsearch:8.3.0
-  #   environment:
-  #     - node.name=es01
-  #     - cluster.name=es-cluster
-  #     - discovery.type=single-node
-  #     - ES_JAVA_OPTS=-Xms512m -Xmx512m
-  #   ports:
-  #     - "9200:9200" 
-  #   volumes:
-  #     - es_data:/usr/share/elasticsearch/data
-
-  # logstash:
-  #   image: docker.elastic.co/logstash/logstash:8.3.0
-  #   ports:
-  #     - "5044:5044"  
-  #   volumes:
-  #     - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
-  #     - ./logstash/pipeline:/usr/share/logstash/pipeline
-  #   depends_on:
-  #     - elasticsearch
-
-  # kibana:
-  #   image: docker.elastic.co/kibana/kibana:8.3.0
-  #   ports:
-  #     - "5601:5601"  
-  #   environment:
-  #     - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-  #   depends_on:
-  #     - elasticsearch
-
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azurite
+    ports:
+      - "10000:10000"  
+      - "10001:10001"  
+      - "10002:10002"  
+    command: >
+      sh -c "azurite --blobHost 0.0.0.0 --blobPort 10000 
+                   --queueHost 0.0.0.0 --queuePort 10001 
+                   --tableHost 0.0.0.0 --tablePort 10002"
+    volumes:
+      - azurite_data:/data
+  
 volumes:
   db_data_final:
-  #es_data:
+  azurite_data:  
+  

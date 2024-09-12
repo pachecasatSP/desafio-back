@@ -1,5 +1,5 @@
 ﻿using desafio_back.domain.Abstractions.Specification;
-using desafio_back.domain.Models.Entities;
+using desafio_back.domain.Entities.DomainEntities;
 
 namespace desafio_back.domain.Specifications
 {
@@ -7,6 +7,6 @@ namespace desafio_back.domain.Specifications
     {
         private const int YEAR2024 = 2024;
 
-        public bool IsSatisfiedBy(Motorcycle entity) => entity.Ano == YEAR2024;
+        public bool IsSatisfiedBy(Motorcycle entity) => entity.Year == YEAR2024;
     }
 }

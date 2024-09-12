@@ -2,11 +2,11 @@
 
 namespace desafio_back.domain.Abstractions.Publishers
 {
-    public interface IMotorcyclePublisher 
+    public interface IMotorcyclePublisher
     {
         Task PublishCreatedMotorcycleEvent(MotorcycleCreatedEvent @event);
 
         Task PublishNew2024MotorcycleCreatedEvent(New2024CreatedMotorcycleEvent @event);
-            
+
     }
 }

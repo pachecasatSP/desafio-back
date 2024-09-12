@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace desafio_back.domain.Abstractions.Repositories
 {
-    public interface IRepository<TEntity> where TEntity : EntityBase, new()
+    public interface IRepository<TEntity> where TEntity : EntityBase
     {
         Task<TEntity> AddAsync(TEntity entity);
         Task<TEntity> UpdateAsync(TEntity entity);

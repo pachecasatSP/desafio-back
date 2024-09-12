@@ -30,7 +30,7 @@ namespace desafio_back.infrastructure.Events.Consumers
 
             var message = context.Message;
 
-            _logger.LogInformation(message.ToString());
+            _logger.LogInformation(message.Entity.ToString());
 
             await _eventStore.SaveAudit(message);
 

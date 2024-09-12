@@ -1,6 +1,8 @@
 ﻿using Serilog;
 using System.Diagnostics;
 
+namespace desafio_back.api.Middlewares;
+
 public class LoggingMiddleware
 {
     private readonly RequestDelegate _next;
@@ -20,7 +22,6 @@ public class LoggingMiddleware
         await _next(context);
 
         stopwatch.Stop();
-
         var logDetails = new
         {
             RequestMethod = context.Request.Method,

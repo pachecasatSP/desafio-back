@@ -1,17 +1,24 @@
 ﻿using desafio_back.domain.Models.Base;
 
-namespace desafio_back.domain.Models.Entities
+namespace desafio_back.domain.Entities.DomainEntities;
+
+public class DeliveryMan : EntityBase
 {
-    public class DeliveryMan : EntityBase
+    public string? Name { get; set; }
+    public string? Cnpj { get; set; }
+    public DateTime BirthDate { get; set; }
+    public string? CNHNumber { get; set; }
+    public string? CNHType { get; set; }
+    public string? CNHImage { get; set; }
+
+    public ICollection<Rental>? RentalCollection { get; set; } = [];
+
+    public void AddRental(Rental rental)
     {
-        public string? Nome { get; set; }
-        public string? Cnpj { get; set; }
-        public DateTime Data_nascimento { get; set; }
-        public string? Numero_cnh { get; set; }
-        public string? Tipo_cnh { get; set; }
-        public string? Imagem_cnh { get; set; }
-
-        public IEnumerable<Rental>? RentalCollection { get; set; }
+        rental.DeliveryMan = this;
+        RentalCollection?.Add(rental);
     }
-
 }
+
+
+

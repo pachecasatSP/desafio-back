@@ -1,4 +1,4 @@
-﻿using desafio_back.domain.Models.Entities;
+﻿using desafio_back.domain.Entities.DomainEntities;
 
 namespace desafio_back.domain.Abstractions.Services
 {
@@ -6,6 +6,7 @@ namespace desafio_back.domain.Abstractions.Services
     {
         Task<bool> PlateDoesNotExists(string placa);
         Task<bool> IdDoesNotExists(string identificador);
+        Task<bool> IdExists(string identificador);
 
     }
 }

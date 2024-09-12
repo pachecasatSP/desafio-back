@@ -2,7 +2,7 @@
 
 namespace desafio_back.domain.Abstractions.Repositories
 {
-    public interface IAuditRepository 
+    public interface IAuditRepository
     {
         Task Create(AuditMessage message);
         Task<IEnumerable<AuditMessage>> GetAll();

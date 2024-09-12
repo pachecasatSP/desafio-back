@@ -22,6 +22,169 @@ namespace desafio_back.infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.DeliveryMan", b =>
+                {
+                    b.Property<int>("InternalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("internal_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InternalId"));
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("date")
+                        .HasColumnName("datanascimento");
+
+                    b.Property<string>("CNHImage")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)")
+                        .HasColumnName("imagemcnh");
+
+                    b.Property<string>("CNHNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("numerocnh");
+
+                    b.Property<string>("CNHType")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("tipocnh");
+
+                    b.Property<string>("Cnpj")
+                        .HasMaxLength(14)
+                        .HasColumnType("character varying(14)")
+                        .HasColumnName("cnpj");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("identificador");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("nome");
+
+                    b.HasKey("InternalId")
+                        .HasName("pk_entregador");
+
+                    b.HasIndex("CNHNumber")
+                        .IsUnique()
+                        .HasDatabaseName("ix_entregador_numerocnh");
+
+                    b.HasIndex("Cnpj")
+                        .IsUnique()
+                        .HasDatabaseName("ix_entregador_cnpj");
+
+                    b.ToTable("entregador", (string)null);
+                });
+
+            modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.Motorcycle", b =>
+                {
+                    b.Property<int>("InternalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("internal_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InternalId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("identificador");
+
+                    b.Property<string>("Model")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("modelo");
+
+                    b.Property<string>("Plate")
+                        .HasMaxLength(8)
+                        .HasColumnType("varchar(8)")
+                        .HasColumnName("placa");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("integer")
+                        .HasColumnName("ano");
+
+                    b.HasKey("InternalId")
+                        .HasName("pk_moto");
+
+                    b.HasIndex("Plate")
+                        .IsUnique()
+                        .HasDatabaseName("ix_moto_placa");
+
+                    b.ToTable("moto", (string)null);
+                });
+
+            modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.Rental", b =>
+                {
+                    b.Property<int>("InternalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("internal_id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InternalId"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<int>("DeliveryManId")
+                        .HasColumnType("integer")
+                        .HasColumnName("entregador_id");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("date")
+                        .HasColumnName("data_termino");
+
+                    b.Property<DateTime>("ForecastEndDate")
+                        .HasColumnType("date")
+                        .HasColumnName("data_previsao_termino");
+
+                    b.Property<string>("Id")
+                        .HasColumnType("text")
+                        .HasColumnName("identificador");
+
+                    b.Property<int>("MotorcycleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("moto_id");
+
+                    b.Property<int>("PlanId")
+                        .HasColumnType("integer")
+                        .HasColumnName("plan_id");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("date")
+                        .HasColumnName("data_inicio");
+
+                    b.HasKey("InternalId")
+                        .HasName("pk_locacao");
+
+                    b.HasIndex("DeliveryManId")
+                        .HasDatabaseName("ix_locacao_delivery_man_id");
+
+                    b.HasIndex("MotorcycleId")
+                        .HasDatabaseName("ix_locacao_motorcycle_id");
+
+                    b.HasIndex("PlanId")
+                        .HasDatabaseName("ix_locacao_plan_id");
+
+                    b.ToTable("locacao", (string)null);
+                });
+
             modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.RentalPlan", b =>
                 {
                     b.Property<int>("InternalId")
@@ -31,41 +194,47 @@ namespace desafio_back.infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InternalId"));
 
-                    b.Property<string>("Identificador")
-                        .IsRequired()
+                    b.Property<decimal>("AdditionalDayValue")
+                        .HasColumnType("numeric")
+                        .HasColumnName("valordiaadicional");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt")
+                        .HasDefaultValueSql("now()");
+
+                    b.Property<decimal>("EarlyPenalty")
+                        .HasColumnType("numeric")
+                        .HasColumnName("multa_antecipacao");
+
+                    b.Property<string>("Id")
                         .HasColumnType("text")
                         .HasColumnName("identificador");
 
-                    b.Property<string>("Nome")
-                        .IsRequired()
+                    b.Property<string>("Name")
                         .HasColumnType("text")
                         .HasColumnName("nome");
 
-                    b.Property<int>("PrazoDias")
+                    b.Property<int>("TermInDays")
                         .HasColumnType("integer")
-                        .HasColumnName("prazodias");
+                        .HasColumnName("prazoemdias");
 
-                    b.Property<DateTime>("Timestamp")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<decimal>("Valor")
+                    b.Property<decimal>("Value")
                         .HasColumnType("numeric")
                         .HasColumnName("valor");
 
                     b.HasKey("InternalId")
                         .HasName("pk_plano");
 
-                    b.HasIndex("Identificador")
+                    b.HasIndex("Id")
                         .IsUnique()
                         .HasDatabaseName("ix_plano_identificador");
 
                     b.ToTable("plano", (string)null);
                 });
 
-            modelBuilder.Entity("desafio_back.domain.Models.Entities.DeliveryMan", b =>
+            modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.RentalReturn", b =>
                 {
                     b.Property<int>("InternalId")
                         .ValueGeneratedOnAdd()
@@ -74,186 +243,96 @@ namespace desafio_back.infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InternalId"));
 
-                    b.Property<string>("Cnpj")
-                        .HasMaxLength(14)
-                        .HasColumnType("character varying(14)")
-                        .HasColumnName("cnpj");
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdAt")
+                        .HasDefaultValueSql("now()");
 
-                    b.Property<DateTime>("Data_nascimento")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("date")
-                        .HasColumnName("datanascimento");
+                        .HasColumnName("date");
 
-                    b.Property<string>("Identificador")
-                        .IsRequired()
+                    b.Property<string>("Id")
                         .HasColumnType("text")
                         .HasColumnName("identificador");
 
-                    b.Property<string>("Imagem_cnh")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
-                        .HasColumnName("imagemcnh");
+                    b.Property<int>("RentalId")
+                        .HasColumnType("integer")
+                        .HasColumnName("rental_id");
 
-                    b.Property<string>("Nome")
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
-                        .HasColumnName("nome");
-
-                    b.Property<string>("Numero_cnh")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)")
-                        .HasColumnName("numerocnh");
-
-                    b.Property<DateTime>("Timestamp")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp")
-                        .HasDefaultValueSql("now()");
-
-                    b.Property<string>("Tipo_cnh")
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)")
-                        .HasColumnName("tipocnh");
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal")
+                        .HasColumnName("value");
 
                     b.HasKey("InternalId")
-                        .HasName("pk_entregador");
+                        .HasName("pk_devolucao");
 
-                    b.ToTable("entregador", (string)null);
-                });
-
-            modelBuilder.Entity("desafio_back.domain.Models.Entities.Motorcycle", b =>
-                {
-                    b.Property<int>("InternalId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("internal_id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("InternalId"));
-
-                    b.Property<int>("Ano")
-                        .HasColumnType("integer")
-                        .HasColumnName("ano");
-
-                    b.Property<string>("Identificador")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("identificador");
-
-                    b.Property<string>("Modelo")
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)")
-                        .HasColumnName("modelo");
-
-                    b.Property<string>("Placa")
-                        .HasMaxLength(8)
-                        .HasColumnType("varchar(8)")
-                        .HasColumnName("placa");
-
-                    b.Property<DateTime>("Timestamp")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp")
-                        .HasDefaultValueSql("now()");
-
-                    b.HasKey("InternalId")
-                        .HasName("pk_moto");
-
-                    b.HasIndex("Placa")
+                    b.HasIndex("RentalId")
                         .IsUnique()
-                        .HasDatabaseName("ix_moto_placa");
+                        .HasDatabaseName("ix_devolucao_rental_id");
 
-                    b.ToTable("moto", (string)null);
+                    b.ToTable("devolucao", (string)null);
                 });
 
-            modelBuilder.Entity("desafio_back.domain.Models.Entities.Rental", b =>
+            modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.Rental", b =>
                 {
-                    b.Property<int>("InternalId")
-                        .HasColumnType("integer")
-                        .HasColumnName("internal_id");
-
-                    b.Property<DateTime>("Data_inicio")
-                        .HasColumnType("timestamp")
-                        .HasColumnName("data_inicio");
-
-                    b.Property<DateTime>("Data_previsao_termino")
-                        .HasColumnType("timestamp")
-                        .HasColumnName("data_previsao_termino");
-
-                    b.Property<DateTime>("Data_termino")
-                        .HasColumnType("timestamp")
-                        .HasColumnName("data_termino");
-
-                    b.Property<int?>("DeliveryManInternalId")
-                        .HasColumnType("integer")
-                        .HasColumnName("delivery_man_internal_id");
-
-                    b.Property<string>("Entregador_id")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)")
-                        .HasColumnName("entregador_id");
-
-                    b.Property<string>("Identificador")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("identificador");
-
-                    b.Property<string>("Moto_id")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)")
-                        .HasColumnName("moto_id");
-
-                    b.Property<DateTime>("Timestamp")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp")
-                        .HasDefaultValueSql("now()");
-
-                    b.HasKey("InternalId")
-                        .HasName("pk_locacao");
-
-                    b.HasIndex("DeliveryManInternalId")
-                        .HasDatabaseName("ix_locacao_delivery_man_internal_id");
-
-                    b.ToTable("locacao", (string)null);
-                });
-
-            modelBuilder.Entity("desafio_back.domain.Models.Entities.Rental", b =>
-                {
-                    b.HasOne("desafio_back.domain.Models.Entities.DeliveryMan", null)
+                    b.HasOne("desafio_back.domain.Entities.DomainEntities.DeliveryMan", "DeliveryMan")
                         .WithMany("RentalCollection")
-                        .HasForeignKey("DeliveryManInternalId")
-                        .HasConstraintName("fk_locacao_entregador_delivery_man_internal_id");
-
-                    b.HasOne("desafio_back.domain.Entities.DomainEntities.RentalPlan", "Plano")
-                        .WithMany()
-                        .HasForeignKey("InternalId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .HasForeignKey("DeliveryManId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_locacao_plano_internal_id");
+                        .HasConstraintName("fk_locacao_entregador_delivery_man_id");
 
-                    b.HasOne("desafio_back.domain.Models.Entities.DeliveryMan", "DeliveryMan")
-                        .WithMany()
-                        .HasForeignKey("InternalId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("desafio_back.domain.Entities.DomainEntities.Motorcycle", "Motorcycle")
+                        .WithMany("RentalCollection")
+                        .HasForeignKey("MotorcycleId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_locacao_entregador_internal_id");
+                        .HasConstraintName("fk_locacao_moto_motorcycle_id");
 
-                    b.HasOne("desafio_back.domain.Models.Entities.Motorcycle", "Motorcycle")
-                        .WithMany()
-                        .HasForeignKey("InternalId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                    b.HasOne("desafio_back.domain.Entities.DomainEntities.RentalPlan", "Plan")
+                        .WithMany("RentalCollection")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_locacao_moto_internal_id");
+                        .HasConstraintName("fk_locacao_plano_plan_id");
 
                     b.Navigation("DeliveryMan");
 
                     b.Navigation("Motorcycle");
 
-                    b.Navigation("Plano");
+                    b.Navigation("Plan");
                 });
 
-            modelBuilder.Entity("desafio_back.domain.Models.Entities.DeliveryMan", b =>
+            modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.RentalReturn", b =>
+                {
+                    b.HasOne("desafio_back.domain.Entities.DomainEntities.Rental", "Rental")
+                        .WithOne("RentalReturn")
+                        .HasForeignKey("desafio_back.domain.Entities.DomainEntities.RentalReturn", "RentalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_devolucao_locacao_rental_id");
+
+                    b.Navigation("Rental");
+                });
+
+            modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.DeliveryMan", b =>
+                {
+                    b.Navigation("RentalCollection");
+                });
+
+            modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.Motorcycle", b =>
+                {
+                    b.Navigation("RentalCollection");
+                });
+
+            modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.Rental", b =>
+                {
+                    b.Navigation("RentalReturn");
+                });
+
+            modelBuilder.Entity("desafio_back.domain.Entities.DomainEntities.RentalPlan", b =>
                 {
                     b.Navigation("RentalCollection");
                 });

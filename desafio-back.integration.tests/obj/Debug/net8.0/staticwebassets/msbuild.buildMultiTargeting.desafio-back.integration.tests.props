@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\desafio-back.integration.tests.props" />
+</Project>

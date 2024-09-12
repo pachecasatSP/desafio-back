@@ -15,11 +15,15 @@ public class ErrorHandlingMiddleware
     {
         try
         {
-            await _next(context); 
+            await _next(context);
+        }
+        catch (ArgumentException ex)
+        {
+            _logger.LogInformation(ex.Message);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"An unhandled exception occurred: {ex.Message + ex.StackTrace}");
+            _logger.LogError(ex, $"Ocorreu um erro inesperado: {ex.Message + ex.StackTrace}");
 
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -27,7 +31,7 @@ public class ErrorHandlingMiddleware
             var errorResponse = new
             {
                 context.Response.StatusCode,
-                Message = "An unexpected error occurred. Please try again later."
+                Message = "Ocorreu um erro. Tente novamente mais tarde."
             };
 
             await context.Response.WriteAsJsonAsync(errorResponse);
