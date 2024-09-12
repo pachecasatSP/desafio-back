@@ -2,7 +2,9 @@
 
 ## Olá!
 
-Meu nome é Adolfo, tenho 42 anos e estou muito empolgado em participar deste processo seletivo. Tenho uma vasta experiência em desenvolvimento de software e estou sempre em busca de novos desafios e oportunidades para aprender e crescer. Este projeto é um reflexo do meu compromisso com boas práticas de desenvolvimento e design de software.
+Meu nome é [Adolfo](https://www.linkedin.com/in/adolfo-sales-pacheco), tenho 42 anos e estou muito empolgado em participar deste processo seletivo. Tenho uma vasta experiência em desenvolvimento de software e estou sempre em busca de novos desafios e oportunidades para aprender e crescer. Este projeto é um reflexo do meu compromisso com boas práticas de desenvolvimento e design de software.
+
+
 
 ## Sobre o Projeto
 
@@ -55,7 +57,8 @@ Para iniciar a aplicação, siga estes passos:
 1a. Execução:	
    ```bash
    docker-compose up --build
-   
+   ```
 Execuçôes subsequentes
-```bash
+   ```bash
    docker-compose up
+   ```
